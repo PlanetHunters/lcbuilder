@@ -97,8 +97,13 @@ class LcbuilderHelper:
         bin_means, bin_edges, binnumber = stats.binned_statistic(time, values, statistic='mean', bins=bins)
         if bin_err_mode == 'flux_err':
             bin_stds, _, _ = stats.binned_statistic(time, values_err, statistic='mean', bins=bins)
-        else:
+        elif bin_err_mode == 'values_std':
             bin_stds, _, _ = stats.binned_statistic(time, values, statistic='std', bins=bins)
+        elif bin_err_mode == 'values_snr':
+            bin_stds, _, _ = stats.binned_statistic(time, values, statistic='std', bins=bins)
+            bin_counts, _, _ = stats.binned_statistic(time, values, statistic='count', bins=bins)
+            bin_counts[bin_counts == 0] = 1
+            bin_stds = bin_stds / np.sqrt(bin_counts)
         bin_width = (bin_edges[1] - bin_edges[0])
         bin_centers = bin_edges[1:] - bin_width / 2
         bin_means_data_mask = np.isnan(bin_means)

@@ -89,14 +89,14 @@ class StandardMissionDataPreparer(MissionDataPreparer):
                                                   self.quarters, self.campaigns, author,
                                                   caches_root_dir + LIGHTKURVE_CACHE_DIR,
                                                   object_info.quality_flag, object_info.initial_trim_sectors)
+        if lcf is None:
+            raise ObjectProcessingError("The target " + str(self.mission_id) + " is not available for the author " +
+                                        author + ", cadence " + str(cadence) + "s and sectors " + str(self.tokens))
         tpfs = LightcurveBuilder.search_tpf(target_name, self.mission_prefix, self.mission, cadence,
                                             self.sectors, self.quarters,
                                             self.campaigns, author, caches_root_dir + LIGHTKURVE_CACHE_DIR,
                                             object_info.quality_flag, (CUTOUT_SIZE, CUTOUT_SIZE),
                                             object_info.initial_trim_sectors)
-        if lcf is None:
-            raise ObjectProcessingError("The target " + str(self.mission_id) + " is not available for the author " +
-                                        author + ", cadence " + str(cadence) + "s and sectors " + str(self.tokens))
         self.lc_data = self.extract_lc_data(lcf)
         self.lc = None
         matching_objects = []

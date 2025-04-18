@@ -22,6 +22,7 @@ setuptools.setup(
     python_requires='>=3.10',
     install_requires=['numpy==1.23.5',
                         'astropy==5.3.4',
+                      'certifi==2025.1.31',
                         'Cython==3.0.6',
                         'everest-pipeline==2.0.12',
                         #'eleanor==2.0.5', included with submodule
@@ -30,13 +31,14 @@ setuptools.setup(
                         "matplotlib==3.8.2",
                         "photutils==1.10.0",
                         "pybind11==2.11.1",
+                        "requests==2.32.3",
                         "scipy==1.11.4",
                         "statsmodels==0.13.5",
                         "tess-point==0.6.1",
                         "foldedleastsquares==1.1.6",
                         'typing_extensions==4.7.1', #For astropy version
                         'uncertainties==3.2.2',
-                        'urllib3==2.2.3',
+                        'urllib3==2.4.0',
                         "wotan==1.9",
     ]
 )

@@ -102,7 +102,7 @@ class StandardMissionDataPreparer(MissionDataPreparer):
         matching_objects = []
         for tpf in tpfs:
             if keep_tpfs:
-                shutil.copy(tpf.path, self.tpfs_dir + os.path.basename(tpf.path))
+                shutil.copy(tpf.path, self.tpfs_dir + f'/{author}_{cadence}_' + os.path.basename(tpf.path))
             if self.mission_prefix == constants.MISSION_ID_KEPLER:
                 sector = tpf.quarter
             elif self.mission_prefix == constants.MISSION_ID_TESS:
@@ -295,7 +295,7 @@ class EleanorMissionDataPreparer(MissionDataPreparer):
                     self.apertures[s.sector] = ApertureExtractor.from_boolean_mask(datum.aperture.astype(bool),
                                                                               tpf.column, tpf.row)
                     if keep_tpfs:
-                        shutil.copy(tpf.path, self.tpfs_dir + os.path.basename(tpf.path))
+                        shutil.copy(tpf.path, self.tpfs_dir + f'/{author}_{cadence}_/' + os.path.basename(tpf.path))
         quality_bitmask = np.bitwise_and(data[0].quality.astype(int),
                                          object_info.quality_flag if object_info.quality_flag != 'default' else 175)
         self.lc_data = self.extract_eleanor_lc_data(data)

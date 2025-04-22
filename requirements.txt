@@ -33,7 +33,7 @@ joblib==1.4.2
 k2plr==0.2.9
 keyring==25.6.0
 kiwisolver==1.4.8
-lcbuilder==0.23.1
+lcbuilder==0.23.2
 lightkurve==2.4.2
 llvmlite==0.41.1
 MarkupSafe==3.0.2
@@ -58,7 +58,7 @@ nvidia-nccl-cu12==2.18.1
 nvidia-nvjitlink-cu12==12.8.93
 nvidia-nvtx-cu12==12.1.105
 oktopus==0.1.2
-packaging==24.2
+packaging==25.0
 pandas==1.5.3
 patsy==1.0.1
 photutils==1.10.0
@@ -78,9 +78,9 @@ requests==2.32.3
 scikit-learn==1.6.1
 scipy==1.11.4
 SecretStorage==3.3.3
-setuptools==78.1.0
+setuptools==79.0.0
 six==1.17.0
-soupsieve==2.6
+soupsieve==2.7
 statsmodels==0.13.5
 sympy==1.13.3
 tess-point==0.6.1

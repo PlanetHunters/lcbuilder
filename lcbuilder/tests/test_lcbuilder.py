@@ -88,14 +88,14 @@ class TestsLcBuilder(TestsLcBuilderAbstract):
     def test_long_cadence(self):
         lc_build = LcBuilder().build(MissionObjectInfo('all', "TIC 352315023", cadence=[600],
                                                        author=[constants.ELEANOR_AUTHOR]), "./")
-        self.assertEqual(lc_build.cadence, 600)
+        self.assertEqual(lc_build.cadence, 200)
         self.assertGreater(len(lc_build.lc), 0)
         self._test_tess_star_params(lc_build.star_info)
 
     def test_long_cadence_other_author(self):
         lc_build = LcBuilder().build(MissionObjectInfo('all', "TIC 192833836", cadence=[600],
                                                        author=[constants.TESS_SPOC_AUTHOR]), "./")
-        self.assertEqual(lc_build.cadence, 600)
+        self.assertEqual(lc_build.cadence, 200)
         self.assertGreater(len(lc_build.lc), 0)
 
     def test_long_cadence_coords(self):

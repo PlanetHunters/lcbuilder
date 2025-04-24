@@ -196,7 +196,12 @@ class LcBuilder:
         if not os.path.exists(os.path.dirname(filename)):
            os.mkdir(os.path.dirname(filename))
         nlags = int(max_days / (cadence_s / 60 / 60 / 24))
-        correlation = acf(lc.flux.value, nlags=nlags, fft=False)
+        x = numpy.asarray(lc.flux.value)
+        x = x - numpy.mean(x)
+        result = numpy.correlate(x, x, mode='full')
+        mid = len(result) // 2
+        result = result[mid:mid + nlags + 1]
+        correlation = result / result[0]
         lags = numpy.linspace(0, max_days, len(correlation))
         fig, axs = plt.subplots(1, 1, figsize=(8, 4), constrained_layout=True)
         axs.set_ylabel("Autocorrelation")

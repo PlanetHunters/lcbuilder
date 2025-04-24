@@ -30,10 +30,9 @@ setuptools.setup(
                         "photutils==1.10.0",
                         "pybind11==2.11.1",
                         "requests==2.32.3",
-                        "statsmodels==0.14.4",
-                        "tess-point==0.6.1",
+                        "tess-point==0.9.2",
                         "foldedleastsquares==1.1.7",
-                        'typing_extensions==4.7.1', #For astropy version
+                        'typing_extensions==4.13.2', #For astropy version
                         'uncertainties==3.2.2',
                         'urllib3==2.4.0',
                         "wotan==1.9",

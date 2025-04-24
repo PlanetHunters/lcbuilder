@@ -9,8 +9,6 @@ import pandas
 import yaml
 import multiprocessing
 
-from statsmodels.tsa.stattools import acf
-
 from lcbuilder.constants import ELEANOR_CACHE_DIR, LIGHTKURVE_CACHE_DIR
 from scipy import stats
 from scipy.signal import savgol_filter

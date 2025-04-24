@@ -9,12 +9,12 @@ from lcbuilder.tests.test_lcbuilder_abstract import TestsLcBuilderAbstract
 
 class TestsApertures(TestsLcBuilderAbstract):
     def test_from_boolean_mask(self):
-        tpfs = lightkurve.search_targetpixelfile(target="TIC 251848941", cadence=120, author="SPOC")\
+        tpfs = lightkurve.search_targetpixelfile(target="TIC 251848941", cadence=[120], author=["SPOC"])\
             .download_all()
         apertures = {}
         for tpf in tpfs:
             apertures[tpf.sector] = ApertureExtractor.from_boolean_mask(tpf.pipeline_mask, tpf.column, tpf.row)
-        self.assertEquals(19, len(apertures[2]))
+        self.assertEqual(19, len(apertures[2]))
         self.assertTrue(any(([649, 171] == x) for x in apertures[2]))
         self.assertTrue(any(([649, 172] == x) for x in apertures[2]))
         self.assertTrue(any(([650, 170] == x) for x in apertures[2]))
@@ -34,7 +34,7 @@ class TestsApertures(TestsLcBuilderAbstract):
         self.assertTrue(any(([653, 171] == x) for x in apertures[2]))
         self.assertTrue(any(([653, 172] == x) for x in apertures[2]))
         self.assertTrue(any(([653, 173] == x) for x in apertures[2]))
-        self.assertEquals(15, len(apertures[29]))
+        self.assertEqual(15, len(apertures[29]))
         self.assertTrue(any(([1133, 142] == x) for x in apertures[29]))
         self.assertTrue(any(([1133, 143] == x) for x in apertures[29]))
         self.assertTrue(any(([1133, 144] == x) for x in apertures[29]))

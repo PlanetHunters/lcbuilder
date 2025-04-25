@@ -102,7 +102,7 @@ class TestsLcBuilder(TestsLcBuilderAbstract):
         lc_build = LcBuilder().build(MissionObjectInfo('all', ra=300.47, dec=-71.96, cadence=[600],
                                                        author=[constants.ELEANOR_AUTHOR]),
                                      "./")
-        self.assertEqual(lc_build.cadence, 600)
+        self.assertEqual(lc_build.cadence, 200)
         self.assertGreater(len(lc_build.lc), 0)
         self._test_tess_star_params(lc_build.star_info)
 

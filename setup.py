@@ -27,7 +27,7 @@ setuptools.setup(
                         'pandas==2.2.3',
                         "lightkurve==2.5.0",
                         "matplotlib==3.10.1",
-                        "photutils==1.10.0",
+                        "photutils==2.2.0",
                         "pybind11==2.11.1",
                         "requests==2.32.3",
                         "tess-point==0.9.2",

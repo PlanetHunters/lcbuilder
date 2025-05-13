@@ -23,13 +23,13 @@ if ! [[ -z ${tests_results} ]]; then
   rm -R lcbuilder-reqs
   conda remove -n lcbuilder-reqs --all -y
   set -e
-  conda create -n lcbuilder-reqs python=3.10 -y
+  conda create -n lcbuilder-reqs python=3.11 -y
   conda activate lcbuilder-reqs
   python3 -m pip install pip -U
   python3 -m pip install setuptools -U
   python3 -m pip install Cython -U
   python3 -m pip install extension-helpers -U
-  python3 -m pip install numpy==1.23.5
+  python3 -m pip install numpy==2.2.4
   python3 -m pip install pybind11
   python3 -m pip install .
   python3 -m pip list --format=freeze > requirements.txt

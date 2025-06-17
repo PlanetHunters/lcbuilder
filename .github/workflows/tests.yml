@@ -17,9 +17,9 @@ jobs:
         os:
           - Ubuntu
         py:
-          - "3.13"
+          - "3.11"
         toxenv:
-          - "py313"
+          - "py311"
 #        exclude:
 #          - py: "3.10"
 #            toxenv: "py39"

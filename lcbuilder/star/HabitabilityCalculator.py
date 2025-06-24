@@ -165,8 +165,8 @@ class HabitabilityCalculator:
         return teff_low.n, teff_low.s, teff_up.s
 
     def calculate_planet_temperature_stat(self, teq, teq_low_err, teq_up_err, teff, teff_low_err, teff_up_err):
-        stat_low = ufloat(teff, teff_low_err) / ufloat(teq, teq_low_err)
-        stat_up = ufloat(teff, teff_up_err) / ufloat(teq, teq_up_err)
+        stat_low = ufloat(teff, teff_low_err) - ufloat(teq, teq_low_err)
+        stat_up = ufloat(teff, teff_up_err) - ufloat(teq, teq_up_err)
         max_err_index = np.argmax([stat_low.s, stat_up.s])
         return stat_low.n / stat_low.s if max_err_index == 0 else stat_up.n / stat_up.s
 

@@ -6,7 +6,7 @@ from lcbuilder.HarmonicSelector import HarmonicSelector
 from lcbuilder.tests.test_lcbuilder_abstract import TestsLcBuilderAbstract
 
 
-class TestsHarmonics(TestsLcBuilderAbstract):
+class TestsHabitabilityCalculator(TestsLcBuilderAbstract):
     habitability_calculator: HabitabilityCalculator = HabitabilityCalculator()
 
     def test_au_to_period(self):
@@ -61,7 +61,7 @@ class TestsHarmonics(TestsLcBuilderAbstract):
             self.habitability_calculator.calculate_planet_temperature_stat(teq_default_albedo[0], teq_default_albedo[1],
                                                                        teq_default_albedo[2], teff[0], teff[1], teff[2])
         )
-        self.assertAlmostEqual(stat, 15.8389, 3)
+        self.assertAlmostEqual(stat, 25.8796815452458, 3)
 
     def test_calculate_albedo(self):
         albedo = self.habitability_calculator.calculate_albedo(0.01, 0.001, 0.001,

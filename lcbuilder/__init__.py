@@ -1,3 +1,6 @@
+import types
+import sys
+
 try:
     from mpl_toolkits.axes_grid1.inset_locator import InsetPosition
 except ImportError:

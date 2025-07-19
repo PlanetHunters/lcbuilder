@@ -3,8 +3,8 @@ import numpy as np
 
 class HarmonicSelector:
     @staticmethod
-    def is_harmonic(a_t0, b_t0, a_period, b_period, t0_tolerance=0.075):
-        multiplicity = HarmonicSelector.multiple_of(a_period, b_period, 0.025)
+    def is_harmonic(a_t0, b_t0, a_period, b_period, t0_tolerance=0.075, period_tolerance=0.025):
+        multiplicity = HarmonicSelector.multiple_of(a_period, b_period, period_tolerance)
         return multiplicity != 0 and HarmonicSelector.matches_t0(a_t0, b_t0, a_period, multiplicity, t0_tolerance)
 
     @staticmethod

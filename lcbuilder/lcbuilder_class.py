@@ -176,7 +176,7 @@ class LcBuilder:
             original_flux_partial = original_flux[previous_jump_index:jumpIndex]
             time_partial = time[(time > original_time_partial[0]) & (time <= original_time_partial[-1])]
             flux_partial = flux[(time > original_time_partial[0]) & (time <= original_time_partial[-1])]
-            if len(flux_partial) != len(original_flux_partial) or numpy.any(flux_partial[1:-1] != original_flux_partial[1:-1]):
+            if len(flux_partial) > 1 and (len(flux_partial) != len(original_flux_partial) or numpy.any(flux_partial[1:-1] != original_flux_partial[1:-1])):
                 if not os.path.exists(dir):
                     os.mkdir(dir)
                 fig, axs = plt.subplots(1, 1, figsize=(16, 6), constrained_layout=True)

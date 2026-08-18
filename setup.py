@@ -30,7 +30,7 @@ setuptools.setup(
                         "pybind11==2.11.1",
                         "requests==2.32.3",
                         "tess-point==0.9.2",
-                        "foldedleastsquares==1.1.11",
+                        "foldedleastsquares==1.1.12",
                         'typing_extensions==4.13.2', #For astropy version
                         'uncertainties==3.2.2',
                         'urllib3==2.4.0',

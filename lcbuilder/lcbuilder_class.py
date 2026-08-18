@@ -188,6 +188,7 @@ class LcBuilder:
                 axs.tick_params(axis='both', which='minor', labelsize=35)
                 plt.savefig(dir + str(object_id) + '_time_' + str(time_partial[1]) + '_' + str(time_partial[-1]) + '.png', bbox_inches='tight')
                 plt.clf()
+                plt.close()
             previous_jump_index = jumpIndex
 
     def __plot_autocorrelation(self, lc, cadence_s, object_id, filename, max_days=5):

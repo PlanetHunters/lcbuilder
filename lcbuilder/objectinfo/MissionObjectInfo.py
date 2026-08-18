@@ -15,7 +15,7 @@ class MissionObjectInfo(ObjectInfo):
                  auto_detrend_enabled=False, auto_detrend_method="cosine", auto_detrend_ratio=0.25,
                  auto_detrend_period=None, prepare_algorithm=None, reduce_simple_oscillations=False,
                  oscillation_snr_threshold=4, oscillation_amplitude_threshold=0.1, oscillation_ws_scale=60,
-                 oscillation_min_period=0.002, oscillation_max_period=0.001, binning=0, eleanor_corr_flux="pca_flux",
+                 oscillation_min_period=0.002, oscillation_max_period=0.001, binning=0,
                  truncate_border=0, lower_outliers_sigma: float = None, quality_flag='default',
                  initial_trim: float = None, initial_trim_sectors: Optional[int] = None, search_engine='cpu'):
         """
@@ -44,7 +44,6 @@ class MissionObjectInfo(ObjectInfo):
         @param oscillation_min_period: minimum period to be computed in the oscillations periodogram
         @param oscillation_max_period: maximum period to be computed in the oscillations periodogram
         @param binning: the number of cadences to be binned together
-        @param eleanor_corr_flux the corrected flux name to be used from ELEANOR
         @param truncate_border the cadences to be eliminated for each 0.5 days separation in days
         @param float lower_outliers_sigma: sigma used to cut lower outliers.
         @param float initial_trim: allowed measurements in days before trimming
@@ -64,7 +63,6 @@ class MissionObjectInfo(ObjectInfo):
         self.sectors = sectors
         self.cadence = cadence
         self.author = author
-        self.eleanor_corr_flux = eleanor_corr_flux
         self.quality_flag = quality_flag
         self.initial_trim_sectors = initial_trim_sectors
 

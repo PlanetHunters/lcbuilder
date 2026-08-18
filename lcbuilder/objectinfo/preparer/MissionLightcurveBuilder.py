@@ -7,7 +7,7 @@ from lcbuilder.LcBuild import LcBuild
 from lcbuilder.objectinfo.ObjectProcessingError import ObjectProcessingError
 from lcbuilder.objectinfo.MissionObjectInfo import MissionObjectInfo
 from lcbuilder.objectinfo.preparer.mission_data_preparer import StandardMissionDataPreparer, EverestMissionDataPreparer, \
-    EleanorMissionDataPreparer, MissionDataPreparer
+    MissionDataPreparer
 from lcbuilder.star import starinfo
 from lcbuilder.objectinfo.preparer.LightcurveBuilder import LightcurveBuilder
 import lightkurve as lk
@@ -110,10 +110,7 @@ class MissionLightcurveBuilder(LightcurveBuilder):
     @staticmethod
     def get_mission_data_preparer(mission_prefix: str, author: str, cadence: int):
         preparer = StandardMissionDataPreparer()
-        if (isinstance(cadence, (int, float)) and cadence >= 600 and
-                mission_prefix == constants.MISSION_ID_TESS and author == constants.ELEANOR_AUTHOR):
-            preparer = EleanorMissionDataPreparer()
-        elif mission_prefix == constants.MISSION_ID_KEPLER_2 and author == constants.EVEREST_AUTHOR:
+        if mission_prefix == constants.MISSION_ID_KEPLER_2 and author == constants.EVEREST_AUTHOR:
             preparer = EverestMissionDataPreparer()
         return preparer
 

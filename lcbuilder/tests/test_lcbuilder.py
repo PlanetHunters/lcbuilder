@@ -85,26 +85,11 @@ class TestsLcBuilder(TestsLcBuilderAbstract):
         self.assertGreater(len(lc_build.lc), 0)
         self._test_k2_star_params(lc_build.star_info)
 
-    def test_long_cadence(self):
-        lc_build = LcBuilder().build(MissionObjectInfo('all', "TIC 352315023", cadence=[600],
-                                                       author=[constants.ELEANOR_AUTHOR]), "./")
-        self.assertEqual(lc_build.cadence, 200)
-        self.assertGreater(len(lc_build.lc), 0)
-        self._test_tess_star_params(lc_build.star_info)
-
     def test_long_cadence_other_author(self):
         lc_build = LcBuilder().build(MissionObjectInfo('all', "TIC 192833836", cadence=[600],
                                                        author=[constants.TESS_SPOC_AUTHOR]), "./")
         self.assertEqual(lc_build.cadence, 600)
         self.assertGreater(len(lc_build.lc), 0)
-
-    def test_long_cadence_coords(self):
-        lc_build = LcBuilder().build(MissionObjectInfo('all', ra=300.47, dec=-71.96, cadence=[600],
-                                                       author=[constants.ELEANOR_AUTHOR]),
-                                     "./")
-        self.assertEqual(lc_build.cadence, 200)
-        self.assertGreater(len(lc_build.lc), 0)
-        self._test_tess_star_params(lc_build.star_info)
 
     def test_input_with_id(self):
         directory = self._get_test_resource_file("input.csv")
@@ -120,14 +105,6 @@ class TestsLcBuilder(TestsLcBuilderAbstract):
         self.assertTrue(lc_build.star_info.radius_assumed)
 
     def test_build(self):
-        lc_build = LcBuilder().build(MissionObjectInfo([13], "TIC 352315023", cadence=[1800],
-                                                       author=[constants.ELEANOR_AUTHOR]), "./")
-        self.assertEqual(1222, len(lc_build.lc))
-        self.assertEqual(1320, len(lc_build.lc_data))
-        lc_build = LcBuilder().build(MissionObjectInfo([13], "TIC 352315023", cadence=[120, 1800],
-                                                       author=[constants.ELEANOR_AUTHOR, constants.SPOC_AUTHOR]), "./")
-        self.assertEqual(19327, len(lc_build.lc))
-        self.assertEqual(21131, len(lc_build.lc_data))
         lc_build = LcBuilder().build(MissionObjectInfo([13], "TIC 352315023",
                                                        author=[constants.SPOC_AUTHOR], cadence=[120]), "./")
         self.assertEqual(18107, len(lc_build.lc))

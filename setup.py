@@ -23,7 +23,6 @@ setuptools.setup(
     install_requires=['certifi==2025.1.31',
                         'Cython==3.0.6',
                         'everest-pipeline==2.0.12',
-                        #'eleanor==2.0.5', included with submodule
                         'pandas==2.2.3',
                         "lightkurve==2.5.0",
                         "matplotlib==3.10.1",

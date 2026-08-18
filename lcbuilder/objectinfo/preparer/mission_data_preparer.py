@@ -2,15 +2,11 @@ import logging
 import os
 import re
 import shutil
-import sys
-import types
 import everest
-import lightkurve as lk
 
 import pandas as pd
 from abc import ABC, abstractmethod
 import astropy.io.fits as astropy_fits
-import astropy.units as u
 from everest.missions.k2 import Season
 from lightkurve import LightCurveCollection, KeplerLightCurve
 
@@ -18,22 +14,15 @@ from lcbuilder.photometry.aperture_extractor import ApertureExtractor
 
 from lcbuilder.objectinfo.ObjectProcessingError import ObjectProcessingError
 
-from lcbuilder.constants import LIGHTKURVE_CACHE_DIR, CUTOUT_SIZE, ELEANOR_CACHE_DIR
+from lcbuilder.constants import LIGHTKURVE_CACHE_DIR, CUTOUT_SIZE
 
 from lcbuilder import constants
 from lcbuilder.objectinfo import MissionObjectInfo
 from lcbuilder.objectinfo.preparer.LightcurveBuilder import LightcurveBuilder
 
-import lcbuilder.eleanor
-sys.modules['eleanor'] = sys.modules['lcbuilder.eleanor']
-import eleanor
-from lcbuilder.eleanor.targetdata import TargetData
-
 import numpy as np
-from astropy.coordinates import SkyCoord
 
 class MissionDataPreparer(ABC):
-    NUMBERS_REGEX = "[0-9]+$"
     OBJECT_ID_REGEX = "^(KIC|TIC|EPIC)[-_ ]([0-9]+)$"
 
     def __init__(self):
@@ -212,103 +201,6 @@ class StandardMissionDataPreparer(MissionDataPreparer):
         for fit_file in fit_files:
             fit_file.close()
         return lc_data
-
-class EleanorMissionDataPreparer(MissionDataPreparer):
-    def __init__(self):
-        super().__init__()
-
-    def extract_eleanor_lc_data(self, eleanor_data):
-        time = []
-        flux = []
-        flux_err = []
-        background_flux = []
-        quality = []
-        centroids_x = []
-        centroids_y = []
-        motion_x = []
-        motion_y = []
-        [time.append(data.time) for data in eleanor_data]
-        [flux.append(data.pca_flux) for data in eleanor_data]
-        [flux_err.append(data.flux_err) for data in eleanor_data]
-        [background_flux.append(data.flux_bkg) for data in eleanor_data]
-        try:
-            [quality.append(data.quality) for data in eleanor_data]
-        except KeyError:
-            logging.info("QUALITY info is not available.")
-            [quality.append(np.full(len(data.time), np.nan)) for data in eleanor_data]
-        [centroids_x.append(data.centroid_xs - data.cen_x) for data in eleanor_data]
-        [centroids_y.append(data.centroid_ys - data.cen_y) for data in eleanor_data]
-        [motion_x.append(data.x_com) for data in eleanor_data]
-        [motion_y.append(data.y_com) for data in eleanor_data]
-        time = np.concatenate(time)
-        flux = np.concatenate(flux)
-        flux_err = np.concatenate(flux_err)
-        background_flux = np.concatenate(background_flux)
-        quality = np.concatenate(quality)
-        centroids_x = np.concatenate(centroids_x)
-        centroids_y = np.concatenate(centroids_y)
-        motion_x = np.concatenate(motion_x)
-        motion_y = np.concatenate(motion_y)
-        lc_data = pd.DataFrame(columns=['time', 'flux', 'flux_err', 'background_flux', 'quality', 'centroids_x',
-                                            'centroids_y', 'motion_x', 'motion_y'])
-        lc_data['time'] = time
-        lc_data['flux'] = flux
-        lc_data['flux_err'] = flux_err
-        lc_data['background_flux'] = background_flux
-        lc_data['quality'] = quality
-        lc_data['centroids_x'] = centroids_x
-        lc_data['centroids_y'] = centroids_y
-        lc_data['motion_x'] = motion_x
-        lc_data['motion_y'] = motion_y
-        return lc_data
-
-    def prepare_mission_data(self, object_info: MissionObjectInfo, author: str, cadence: int, sherlock_dir, caches_root_dir,
-                     keep_tpfs: bool = True):
-        logging.info(f"Retrieving ELEANOR data with author {author} and cadence {cadence}s")
-        source = "eleanor"
-        if object_info.ra is not None and object_info.dec is not None:
-            coords = SkyCoord(ra=object_info.ra, dec=object_info.dec, unit=(u.deg, u.deg))
-            star = eleanor.source.multi_sectors(coords=coords, sectors=object_info.sectors,
-                                                post_dir=caches_root_dir + ELEANOR_CACHE_DIR,
-                                                metadata_path=caches_root_dir + ELEANOR_CACHE_DIR)
-        else:
-            object_id_parsed = re.search(MissionDataPreparer.NUMBERS_REGEX, object_info.id)
-            object_id_parsed = object_info.id[object_id_parsed.regs[0][0]:object_id_parsed.regs[0][1]]
-            star = eleanor.multi_sectors(tic=object_id_parsed, sectors=object_info.sectors,
-                                         post_dir=caches_root_dir + ELEANOR_CACHE_DIR,
-                                         metadata_path=caches_root_dir + ELEANOR_CACHE_DIR)
-        if star is None:
-            raise ObjectProcessingError("No data for this object")
-        if star[0].tic:
-            # TODO FIX star info objectid
-            logging.info("Assotiated TIC is " + str(star[0].tic))
-            tpfs = lk.search_tesscut("TIC " + str(star[0].tic), sector=self.sectors) \
-                .download_all(download_dir=caches_root_dir + LIGHTKURVE_CACHE_DIR,
-                              cutout_size=(CUTOUT_SIZE, CUTOUT_SIZE))
-        data = []
-        for s in star:
-            datum = TargetData(s, height=CUTOUT_SIZE, width=CUTOUT_SIZE, do_pca=True)
-            data.append(datum)
-            for tpf in tpfs:
-                if tpf.sector == s.sector:
-                    self.sectors_to_start_end_times[s.sector] = (tpf.time[0].value, tpf.time[-1].value)
-                    self.apertures[s.sector] = ApertureExtractor.from_boolean_mask(datum.aperture.astype(bool),
-                                                                              tpf.column, tpf.row)
-                    if keep_tpfs:
-                        shutil.copy(tpf.path, self.tpfs_dir + f'/{author}_{cadence}_' + os.path.basename(tpf.path))
-        quality_bitmask = np.bitwise_and(data[0].quality.astype(int),
-                                         object_info.quality_flag if object_info.quality_flag != 'default' else 175)
-        self.lc_data = self.extract_eleanor_lc_data(data)
-        self.lc = data[0].to_lightkurve(data[0].__dict__[object_info.eleanor_corr_flux],
-                                   quality_mask=quality_bitmask).remove_nans().flatten()
-        self.sectors = [datum.source_info.sector for datum in data]
-        if len(data) > 1:
-            for datum in data[1:]:
-                quality_bitmask = np.bitwise_and(datum.quality,
-                                                 object_info.quality_flag if object_info.quality_flag != 'default' else 175)
-                self.lc = self.lc.append(datum.to_lightkurve(datum.pca_flux, quality_mask=quality_bitmask).remove_nans()
-                               .flatten())
-        return self.lc, self.lc_data, source, self.apertures, self.sectors, self.sectors_to_start_end_times
 
 class EverestMissionDataPreparer(MissionDataPreparer):
     def __init__(self):

@@ -9,7 +9,7 @@ import pandas
 import yaml
 import multiprocessing
 
-from lcbuilder.constants import ELEANOR_CACHE_DIR, LIGHTKURVE_CACHE_DIR
+from lcbuilder.constants import LIGHTKURVE_CACHE_DIR
 from scipy import stats
 from scipy.signal import savgol_filter
 from wotan import flatten
@@ -46,9 +46,6 @@ class LcBuilder:
         lightkurve_cache_dir = caches_root_dir + LIGHTKURVE_CACHE_DIR
         if not os.path.exists(lightkurve_cache_dir):
             os.mkdir(lightkurve_cache_dir)
-        eleanor_cache_dir = caches_root_dir + ELEANOR_CACHE_DIR
-        if not os.path.exists(eleanor_cache_dir):
-            os.mkdir(eleanor_cache_dir)
         lc_build = self.lightcurve_builders[type(object_info)].build(object_info, object_dir, caches_root_dir)
         if lc_build.tpf_apertures is not None:
             with open(object_dir + "/apertures.yaml", 'w') as f:
@@ -679,7 +676,7 @@ class LcBuilder:
         return med
 
     def build_object_info(self, target_name, author, sectors, file, cadence, initial_mask, initial_transit_mask,
-                          star_info, aperture, eleanor_corr_flux='pca_flux',
+                          star_info, aperture,
                           outliers_sigma=None, high_rms_enabled=True, high_rms_threshold=2.5,
                           high_rms_bin_hours=4, smooth_enabled=False,
                           auto_detrend_enabled=False, auto_detrend_method="cosine", auto_detrend_ratio=0.25,
@@ -701,7 +698,7 @@ class LcBuilder:
                                      auto_detrend_method, auto_detrend_ratio, auto_detrend_period, prepare_algorithm,
                                      reduce_simple_oscillations, oscillation_snr_threshold,
                                      oscillation_amplitude_threshold, oscillation_ws_scale, oscillation_min_period,
-                                     oscillation_max_period, binning, eleanor_corr_flux, truncate_border,
+                                     oscillation_max_period, binning, truncate_border,
                                      lower_outliers_sigma=lower_outliers_sigma, initial_trim=initial_trim,
                                      initial_trim_sectors=initial_trim_sectors, search_engine=search_engine)
         elif mission is not None and file is not None:
